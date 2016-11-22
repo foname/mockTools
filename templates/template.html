@@ -1,0 +1,10 @@
+{% for item in items %}
+  <p>
+  	{{ item.request.method }} 
+  	<b> {{ item.request.urlPathMatching }} </b>
+  	</br>
+  	{{ item.request }} 
+  	{{ item.response }} 
+  </p>
+
+{% endfor %}

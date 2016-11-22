@@ -1,6 +1,5 @@
 version: '2'
 services:
-    
     web:
         build: .
         command: python -u main_app.py
@@ -8,9 +7,12 @@ services:
             - .:/code
         ports:
             - "5000:5000"
-        depends_on:
+        links:
             - db
+        environment:
+            - DB_PORT_27017_TCP_ADDR=db
     db:
-        image: mongo:3.0.2
+        image: mongo
         ports:
             - "27017:27017"
+        command: "--smallfiles --logpath=/dev/null"
