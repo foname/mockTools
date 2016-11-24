@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template
 from pymongo import MongoClient
 from flask_restful import Resource, Api
+from mirror import mirror
 
 app = Flask(__name__)
 api = Api(app)
@@ -23,8 +24,8 @@ def list():
 class adapter(Resource):
     def get(self, provider_slug):
         item = db.requests.find_one({"request.urlPathMatching": "/{}".format(provider_slug), "request.method":"GET"})
+        print(item)
         if item:
-            print(type(item['response']['status']))
             return item['response']['jsonBody'], item['response']['status']
         return
 
@@ -40,7 +41,11 @@ class adapter(Resource):
             return item['response']['jsonBody'], item['response']['status']
         return 
 
+
+api.add_resource(mirror, '/mirror/<string:provider_slug>')
 api.add_resource(adapter, '/<string:provider_slug>')
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
